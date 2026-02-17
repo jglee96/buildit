@@ -1,0 +1,75 @@
+@base=http://127.0.0.1:8000/api
+
+### 1) create user
+POST {{base}}/users
+Content-Type: application/json
+
+{
+  "email": "demo@buildit.ai",
+  "name": "demo"
+}
+
+### 2) create rule set
+POST {{base}}/rules/sets
+Content-Type: application/json
+
+{
+  "country_code": "KR",
+  "jurisdiction_code": "KR-11-SEOUL-JONGNO",
+  "category": "zoning",
+  "version": "2026.02.01",
+  "effective_from": "2026-02-01",
+  "effective_to": null,
+  "source_url": "https://example.go.kr/notice/2026-02-01",
+  "source_hash": "sha256:demo",
+  "published_at": "2026-02-01T00:00:00Z",
+  "status": "active"
+}
+
+### 3) create rule definition (replace rule_set_id)
+POST {{base}}/rules/definitions
+Content-Type: application/json
+
+{
+  "rule_set_id": "REPLACE_RULE_SET_ID",
+  "rule_key": "max_far",
+  "rule_type": "hard",
+  "expression": {"op": "lte", "field": "far", "value": 500},
+  "priority": 10
+}
+
+### 4) create project (replace user_id)
+POST {{base}}/projects
+Content-Type: application/json
+
+{
+  "user_id": "REPLACE_USER_ID",
+  "name": "jongno-test",
+  "country_code": "KR",
+  "jurisdiction_code": "KR-11-SEOUL-JONGNO",
+  "occupancy_type": "residential",
+  "site_geojson": {
+    "type": "Polygon",
+    "coordinates": [[[126.98,37.57],[126.99,37.57],[126.99,37.58],[126.98,37.58],[126.98,37.57]]]
+  }
+}
+
+### 5) requirements (replace project_id)
+POST {{base}}/projects/REPLACE_PROJECT_ID/requirements
+Content-Type: application/json
+
+[
+  {"key": "far", "min_value": 300, "max_value": 550, "required_value": null, "unit": "%"},
+  {"key": "height", "min_value": null, "max_value": 70, "required_value": null, "unit": "m"}
+]
+
+### 6) evaluate (replace project_id)
+POST {{base}}/runs/projects/REPLACE_PROJECT_ID/evaluate
+Content-Type: application/json
+
+{
+  "evaluation_date": "2026-02-10",
+  "category": "zoning",
+  "objective": "maximize_far",
+  "hours": [9, 12, 15]
+}

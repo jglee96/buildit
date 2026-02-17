@@ -1,0 +1,40 @@
+# OS/editor
+.DS_Store
+.idea/
+.vscode/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Env/secrets
+.env
+.env.*
+!.env.example
+
+# Runtime outputs
+.run/
+*.log
+*.pid
+
+# Local databases and temp files
+*.db
+*.sqlite
+*.sqlite3
+*.tmp
+*.swp
+
+# Frontend build/cache
+web/node_modules/
+web/dist/
+web/.vite/
+web/coverage/
+web/*.tsbuildinfo
